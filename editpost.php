@@ -1,0 +1,207 @@
+<?php
+$id = $_GET['id'];
+
+$conn = mysqli_connect('localhost', 'root', 'root', 'mybbs');
+
+if (mysqli_connect_errno() !== 0) {
+    die(mysqli_connect_error());
+}
+
+$sql = "SELECT * FROM post WHERE id = " . $id;
+
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_errno($conn) !== 0) {
+    die(mysqli_error($conn));
+}
+
+$row = mysqli_fetch_assoc($result);
+
+?>
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <meta name="renderer" content="webkit">
+        <title>BBS - Learnphp</title>
+
+        <!-- Bootstrap -->
+        <link href="static/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="static/css/style.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="header">
+            <div class="wrap">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="logobar">
+                                <div class="mainnav-oner icon hidden-md hidden-lg" id="mainnav-oner" data-target="#mainnav">
+                                    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                                </div>
+                                <div class="logo">
+                                    <div class="image">
+                                        <a href="">
+                                            <img src="static/img/logo.png" alt="">
+                                        </a>
+                                    </div>
+                                    <h1 class="title">
+                                        <a href="">
+                                            <span>BBS</span>
+                                        </a>
+                                    </h1>
+                                </div>
+                                <div class="search-oner icon hidden-md hidden-lg" id="search-oner" data-target="#search">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="search" id="search">
+                                <div class="search-offer icon hidden-md hidden-lg" id="search-offer" data-target="#search">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </div>
+                                <form action="" method="get">
+                                    <div class="input-group">
+                                        <label class="sr-only" for="keyword">搜索：</label>
+                                        <input type="text" class="form-control" id="keyword" placeholder="关键词">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-info" type="button">搜索</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mainnav" id="mainnav">
+                                <div class="usermenu">
+                                    <div class="links">
+                                        <a href="">登录</a>
+                                        <span>/</span>
+                                        <a href="">注册</a>
+                                    </div>
+                                    <div class="mainnav-offer icon hidden-md hidden-lg" id="mainnav-offer" data-target="#mainnav">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <ul class="list-inline navmenu">
+                                    <li class="active">
+                                        <a href="">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Backend</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Frontend</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Database</a>
+                                    </li>
+                                    <li>
+                                        <a href="">UI</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="wrap">
+                <div class="container-fluid">
+                    <div class="crumbs_pages">
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <div class="crumbs">
+                                    <a href="">首页</a>
+                                    >
+                                    <span>新建帖子</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-5 hidden-xs">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="newpost block">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="userinfo">
+                                    <div class="avatar">
+                                        <img src="static/pic/1.jpg" alt="">
+                                    </div>
+                                    <span class="nickname">andy</span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="postform">
+                                    <form action="updatepost.php" method="post">
+                                        <div class="form-group">
+                                            <label for="subject">主题：</label>
+                                            <input <?php if($row['parent_id'] != 0) {?> readonly <?php }?> type="text" class="form-control" id="subject" name="subject" value="<?=$row['subject'];?>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="content">内容：</label>
+                                            <textarea class="form-control" rows="5" id="content" name="content"><?=$row['content'];?></textarea>
+                                        </div>
+
+                                        <!-- <div class="form-group row">
+                                            <div class="col-xs-5 col-md-2">
+                                                <label class="sr-only">验证码：</label>
+                                                <input type="text" class="form-control" id="authcode" name="authcode" placeholder="验证码">
+                                            </div>
+                                            <div class="col-xs-7 col-md-10">
+                                                <img class="authcod_img" src="static/pic/authcocd.jpg" alt="">
+                                            </div>
+                                        </div> -->
+                                        <input type="hidden" name="section_id" value="<?=$row['section_id'];?>">
+                                        <input type="hidden" name="parent_id" value="<?=$row['parent_id'];?>">
+                                        <input type="hidden" name="id" value="<?=$row['id'];?>">
+                                        <button type="submit" class="btn btn-info">提交</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="wrap">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                <a href="">Home</a> / <a href="">Backend</a> / <a href="">Frontend</a> / <a href="">Database</a> / <a href="">UI</a>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="cpoyright">Copyright ©2018 bbs.onlyzen.cn, All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mask" id="mask"></div>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="static/js/jquery-1.12.4.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="static/js/header.js"></script>
+    </body>
+</html>
